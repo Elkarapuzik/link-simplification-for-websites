@@ -39,11 +39,24 @@ if user_choice == 1:
     cprint(f"""
 Your abbreviated reference ×
                            │
-                           ╰─>{response.json()['link']}""",'green')
+                           ╰─> {response.json()['link']}""",'green')
 
 if user_choice == 2:
-    print("Test getting number of clicks on shortened link")
+    user_abbreviated_url = input("write your abbreviated reference -> ")
+    abbreviated_params = {
+        "unit" : "month",
+        "units"  : "-1"
+    }
+
+    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{user_abbreviated_url}/clicks/summary', headers=headers, params=abbreviated_params)
+    response.raise_for_status()
+
+    cprint(f"""
+click-through rate  ×
+                    ╰─> {response.json()['total_clicks']}""",'green')
+
 if user_choice > 2:
     print('You have to choose 1 or 2')
     exit()
+
 
