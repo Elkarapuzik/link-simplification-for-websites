@@ -19,44 +19,50 @@ url = 'https://api-ssl.bitly.com/v4/user'
 response = requests.get(url, headers=headers)
 response.raise_for_status()
 
+while True:
+    print("1.Shorten link")
+    print("2.Find the number of clicks on the shortened link")
+    print("3.Exit")
 
-print("1.Shorten link")
-print("2.Find the number of clicks on the shortened link")
+    user_choice = int(input("Select the function: "))
 
-user_choice = int(input("Select the function: "))
 
-if user_choice == 1:
-    user_url = input("enter your link-> ")
-    abbreviated_reference = {
-        "long_url" : user_url,
-    }
+    if user_choice == 1:
+        user_url = input("enter your link-> ")
+        abbreviated_reference = {
+            "long_url" : user_url,
+        }
 
-    response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, json=abbreviated_reference)
-    response.raise_for_status()
+        response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, json=abbreviated_reference)
+        response.raise_for_status()
 
-    
-    
-    cprint(f"""
+        
+        
+        cprint(f"""
 Your abbreviated reference ×
                            │
-                           ╰─> {response.json()['link']}""",'green')
+                           ╰─> {response.json()['link']}\n""",'green')
 
-if user_choice == 2:
-    user_abbreviated_url = input("write your abbreviated reference -> ")
-    abbreviated_params = {
-        "unit" : "month",
-        "units"  : "-1"
-    }
+    if user_choice == 2:
+        user_abbreviated_url = input("write your abbreviated reference -> ")
+        abbreviated_params = {
+            "unit" : "month",
+            "units"  : "-1"
+        }
 
-    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{user_abbreviated_url}/clicks/summary', headers=headers, params=abbreviated_params)
-    response.raise_for_status()
+        response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{user_abbreviated_url}/clicks/summary', headers=headers, params=abbreviated_params)
+        response.raise_for_status()
 
-    cprint(f"""
+        cprint(f"""
 click-through rate  ×
-                    ╰─> {response.json()['total_clicks']}""",'green')
+                    ╰─> {response.json()['total_clicks']}\n""",'green')
 
-if user_choice > 2:
-    print('You have to choose 1 or 2')
-    exit()
+    if user_choice == 3:
+        print("\n")
+        exit()
+            
+
+    if user_choice > 3:
+        print("""You have to choose 1/2/3/\n""")
 
 
