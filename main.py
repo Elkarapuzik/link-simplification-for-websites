@@ -1,5 +1,6 @@
 import requests
 import os
+from urllib.parse import urlparse
 from time import sleep
 from termcolor import cprint
 from dotenv import load_dotenv
@@ -51,16 +52,18 @@ Your abbreviated link ×
 
     elif user_choice == 2:
         user_abbreviated_url = input("write your abbreviated link -> ")
+        splited_shorten_user_url = urlparse(user_abbreviated_url)
+        nohttps_user_shorten_url = splited_shorten_user_url.netloc + splited_shorten_user_url.path
         abbreviated_params = {
             "unit" : "month",
             "units"  : "-1"
         }
 
-        try:       
-            response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{user_abbreviated_url}/clicks/summary', headers=headers, params=abbreviated_params)
+        try:
+            response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{nohttps_user_shorten_url}/clicks/summary', headers=headers, params=abbreviated_params)
             response.raise_for_status()
         except requests.exceptions.HTTPError:
-            cprint(f"Incorrect shortened link -> {user_abbreviated_url}\n", 'red')
+            cprint(f"Incorrect shortened link -> {nohttps_user_shorten_url}\n", 'red')
             continue
 
         cprint(f"""
