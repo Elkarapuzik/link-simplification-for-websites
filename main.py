@@ -1,8 +1,8 @@
 import os
 from pprint import pprint
 from time import sleep
-#_________________________
 from urllib.parse import urlparse
+#________________________________
 import requests
 from termcolor import cprint
 from dotenv import load_dotenv
