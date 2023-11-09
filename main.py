@@ -1,10 +1,12 @@
-import requests
 import os
-from urllib.parse import urlparse
+from pprint import pprint
 from time import sleep
+#_________________________
+from urllib.parse import urlparse
+import requests
 from termcolor import cprint
 from dotenv import load_dotenv
-from pprint import pprint
+
 load_dotenv()
 
 token = os.getenv("TOKEN")
@@ -34,33 +36,33 @@ while True:
 
     if user_choice == 1:
         user_url = input("enter your link-> ")
-        abbreviated_link = {
+        shorten_link = {
             "long_url" : user_url,
         }
 
         try:
-            response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, json=abbreviated_link)
+            response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, json=shorten_link)
             response.raise_for_status()
         except requests.exceptions.HTTPError:
             cprint(f"Incorrect link -> {user_url}\n", 'red')
             continue
         
         cprint(f"""
-Your abbreviated link ×
+Your shorten link ×
                       │
                       ╰─> {response.json()['link']}\n""", 'green')
 
     elif user_choice == 2:
-        user_abbreviated_url = input("write your abbreviated link -> ")
-        splited_shorten_user_url = urlparse(user_abbreviated_url)
+        user_shorten_url = input("write your shorten link -> ")
+        splited_shorten_user_url = urlparse(user_shorten_url)
         nohttps_user_shorten_url = splited_shorten_user_url.netloc + splited_shorten_user_url.path
-        abbreviated_params = {
+        params = {
             "unit" : "month",
             "units"  : "-1"
         }
 
         try:
-            response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{nohttps_user_shorten_url}/clicks/summary', headers=headers, params=abbreviated_params)
+            response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{nohttps_user_shorten_url}/clicks/summary', headers=headers, params=params)
             response.raise_for_status()
         except requests.exceptions.HTTPError:
             cprint(f"Incorrect shortened link -> {nohttps_user_shorten_url}\n", 'red')
